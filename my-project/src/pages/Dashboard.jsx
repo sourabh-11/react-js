@@ -25,7 +25,7 @@ const Dashboard = () => {
 
         {user.role === "student" && <StudentDashboard />}
         {user.role === "instructor" && <InstructorDashboard />}
-        {user.role === "admin" && <AdminDashboard />}
+        {user.role === "admin" && <AdminDashboard  />}
       </div>
     </div>
   );
