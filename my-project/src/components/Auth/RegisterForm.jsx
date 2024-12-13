@@ -1,13 +1,35 @@
 import React, { useState } from "react";
 
-const RegisterForm = ({ switchToLogin }) => {
+const RegisterForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Registration submitted:", { name, email, password });
+
+    try {
+      // Send the registration data to the backend
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Registration successful!");
+      } else {
+        setMessage(data.error || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Error connecting to the server.");
+    }
   };
 
   return (
@@ -64,10 +86,10 @@ const RegisterForm = ({ switchToLogin }) => {
             Register
           </button>
         </form>
+        {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
         <p className="mt-4 text-center text-gray-600">
           Already have an account?{" "}
           <button
-            onClick={switchToLogin}
             className="text-blue-500 hover:underline focus:outline-none"
           >
             Login here
